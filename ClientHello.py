@@ -3,6 +3,8 @@ from slice import slice
 
 class ClientHello:
     """
+    https://datatracker.ietf.org/doc/html/rfc8446#page-27
+
     struct {
         ProtocolVersion legacy_version = 0x0303;    /* TLS v1.2 */
         Random random;
@@ -38,8 +40,10 @@ class ClientHello:
         self.legacy_compression_methods = [legacy_compression_methods[start:start + 1].hex() for start in
                                            range(0, len(legacy_compression_methods), 1)]
 
+        length, data = slice(data, 2)
+        length = int(length.hex(), 16)
 
-
+        self.extensions, data = slice(data, length)
 
         print('\nClientHello: ')
         print(f' Protocol Version = {self.protocol_version[0]}.{self.protocol_version[1]}')
@@ -47,3 +51,12 @@ class ClientHello:
         print(f' Legacy Session ID: {self.legacy_session_id}')
         print(f' Cipher Suites: {self.cipher_suites}')
         print(f' Legacy Compression Methods: {self.legacy_compression_methods}')
+        print(f' Extensions: {self.extensions}')
+
+        # ***************
+        print(self.extensions)
+        type, data = slice(self.extensions, 1)
+        print(int(type.hex(), 16))
+        # length = length.hex()
+        # print(length)
+        # ***************
