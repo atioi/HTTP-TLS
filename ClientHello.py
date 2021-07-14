@@ -1,3 +1,4 @@
+from Extension import *
 from slice import slice
 
 
@@ -54,9 +55,7 @@ class ClientHello:
         print(f' Extensions: {self.extensions}')
 
         # ***************
-        print(self.extensions)
-        type, data = slice(self.extensions, 1)
-        print(int(type.hex(), 16))
-        # length = length.hex()
-        # print(length)
+        ext_type, data = slice(self.extensions, 2)
+        ext_type = int(ext_type.hex(), 16)
+        add_extension(ext_type)
         # ***************
